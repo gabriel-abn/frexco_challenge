@@ -10,11 +10,7 @@ const MainInput: React.FC = () => {
         birthDate: "",
     };
 
-    const [user, setUser] = useState<IUser>({
-        login: "",
-        password: "",
-        birthDate: "",
-    });
+    const [user, setUser] = useState<IUser>(InitialUser);
     const [users, setUsers] = useState<Array<IUser>>([]);
 
     useEffect(() => {
@@ -31,29 +27,60 @@ const MainInput: React.FC = () => {
     }, []);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target;
+        const { name, value } = event.target;
+        setUser({ ...user, [name]: value });
+        console.log(value + " Handler");
     };
 
-    const insertUser = () => {};
+    const saveUser = () => {
+        var insertion = {
+            login: user.login,
+            password: user.password,
+            birthDate: "today",
+        };
+        requests
+            .create(insertion)
+            .then((res) => {
+                setUser({
+                    login: res.data.login,
+                    password: res.data.password,
+                    birthDate: res.data.birthDate,
+                });
+                console.log(JSON.stringify(res.data));
+            })
+            .catch((err: Error) => {
+                console.log(err.message);
+            });
+        console.log("Save data: " + JSON.stringify(insertion));
+        console.log("Save user: " + JSON.stringify(user));
+    };
+
+    // const newUser = () => {
+    //     setUser(InitialUser);
+    // };
 
     return (
         <div>
             <MainDiv>
                 <label>Username</label>
-                <input type="text" name="login" value={user.login} />
-                <label>Password</label>
-                <input type="password" name="password" value={user.password} />
                 <input
-                    type="button"
-                    value="submit"
-                    onClick={(e) => {
-                        // setUser();
-                    }}
+                    type="text"
+                    name="login"
+                    value={user.login}
+                    onChange={handleInputChange}
                 />
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    value={user.password}
+                    onChange={handleInputChange}
+                />
+                <input type="button" value="submit" onClick={saveUser} />
             </MainDiv>
-            <MainDiv>
+            <MainDiv direction="row">
                 {users.map((user) => (
-                    <h4>{user.login}</h4>
+                    <h4 key={user.login}>{user.login}</h4>
                 ))}
             </MainDiv>
         </div>
