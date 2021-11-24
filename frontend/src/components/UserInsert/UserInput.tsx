@@ -3,12 +3,17 @@ import { MainDiv } from "./styles";
 import { IUser } from "../../types/userType";
 import requests from "../../apis/requests";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 const MainInput: React.FC = () => {
     const InitialUser = {
         login: "",
         password: "",
         birthDate: "",
     };
+
+    var todayDate = new Date();
 
     const [user, setUser] = useState<IUser>(InitialUser);
     const [users, setUsers] = useState<Array<IUser>>([]);

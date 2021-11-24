@@ -8,7 +8,7 @@ const getById = (id: string) => {
     return http.get<IUser>(`/users/${id}/`);
 };
 const create = (user: IUser) => {
-    return http.post<IUser>("/users/", user);
+    return http.post<IUser>("/users/", JSON.stringify(user));
 };
 
 const UserService = {
