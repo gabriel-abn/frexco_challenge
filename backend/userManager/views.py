@@ -7,15 +7,18 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from .serializers import UserSerializer
 from .models import User
+import logging
+
+logger = logging.getLogger(__name__)
 
 @api_view(['GET', 'POST', 'DELETE'])
 def users_list(request):
     if request.method == 'GET':
         users = User.objects.all()
-        login = request.GET.get('login', None)
+        id_user = request.GET.get('id', None)
 
-        if login is not None:
-            users = users.filter(login__icontains=login)
+        if id_user is not None:
+            users = users.filter(id__icontains=id_user)
 
         users_serializer = UserSerializer(users, many=True)
         return JsonResponse(users_serializer.data, safe=False)

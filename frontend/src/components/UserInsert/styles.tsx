@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 interface IProps {
     direction?: string;
+    position?: string;
 }
 
 export const MainDiv = styled.div`
@@ -10,7 +11,7 @@ export const MainDiv = styled.div`
     align-items: center;
     flex-direction: ${(props: IProps) => (props.direction ? "row" : "column")};
     margin: 5vh;
-    padding: 5vh 30vw;
+    padding: 5vh 10vw;
     justify-content: space-between;
 
     border-radius: 5px;

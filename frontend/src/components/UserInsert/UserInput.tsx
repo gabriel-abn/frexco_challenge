@@ -3,8 +3,7 @@ import { MainDiv } from "./styles";
 import { IUser } from "../../types/userType";
 import requests from "../../apis/requests";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Table, Button } from "react-bootstrap";
 
 const MainInput: React.FC = () => {
     const InitialUser = {
@@ -12,9 +11,6 @@ const MainInput: React.FC = () => {
         password: "",
         birthDate: "",
     };
-
-    var todayDate = new Date();
-
     const [user, setUser] = useState<IUser>(InitialUser);
     const [users, setUsers] = useState<Array<IUser>>([]);
 
@@ -37,8 +33,21 @@ const MainInput: React.FC = () => {
         console.log(value + " Handler");
     };
 
+    const deleteUser = (userRemove: IUser) => {
+        console.log(JSON.stringify(userRemove));
+        requests
+            .remove(userRemove)
+            .then((res) => {
+                console.log(JSON.stringify(res.data));
+            })
+            .catch((err: Error) => {
+                console.log(err.message);
+            });
+    };
+
     const saveUser = () => {
         var insertion = {
+            id: user.id,
             login: user.login,
             password: user.password,
             birthDate: "today",
@@ -64,9 +73,37 @@ const MainInput: React.FC = () => {
     //     setUser(InitialUser);
     // };
 
+    const renderList = () => {
+        return users.map((userInfo) => {
+            return (
+                <tr key={userInfo.id}>
+                    <td key={userInfo.id}>{userInfo.id}</td>
+                    <td key={userInfo.login}>{userInfo.login}</td>
+                    <td key={userInfo.password}>{userInfo.password}</td>
+                    <td key={userInfo.birthDate}>{userInfo.birthDate}</td>
+                    <td>
+                        <Button variant="warning" size="sm">
+                            Edit
+                        </Button>
+                        <Button
+                            value={userInfo.id}
+                            variant="danger"
+                            size="sm"
+                            onClick={() => {
+                                deleteUser(userInfo);
+                            }}
+                        >
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            );
+        });
+    };
+
     return (
         <div>
-            <MainDiv>
+            <MainDiv direction="row">
                 <label>Username</label>
                 <input
                     type="text"
@@ -84,9 +121,17 @@ const MainInput: React.FC = () => {
                 <input type="button" value="submit" onClick={saveUser} />
             </MainDiv>
             <MainDiv direction="row">
-                {users.map((user) => (
-                    <h4 key={user.login}>{user.login}</h4>
-                ))}
+                <Table striped hover className="text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Login</th>
+                            <th>Password</th>
+                            <th>Birth Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>{renderList()}</tbody>
+                </Table>
             </MainDiv>
         </div>
     );
