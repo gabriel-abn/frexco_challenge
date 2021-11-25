@@ -14,8 +14,8 @@ const remove = (user: IUser) => {
     console.log(JSON.stringify(user));
     return http.delete<any>(`/users/${user.id}`);
 };
-const update = (id: number, user: IUser) => {
-    return http.put<any>(`/users/${id}`, user);
+const update = (user: IUser) => {
+    return http.put<any>(`/users/${user.id}`, user);
 };
 
 const UserService = {

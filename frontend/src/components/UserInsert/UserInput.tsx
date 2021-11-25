@@ -1,9 +1,12 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { MainDiv } from "./styles";
 import { IUser } from "../../types/userType";
-import requests from "../../apis/requests";
+import requests from "../../services/requests";
 
 import { Table, Button } from "react-bootstrap";
+import EditUser from "../EditUser/editUser";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 
 const MainInput: React.FC = () => {
     const InitialUser = {
@@ -82,9 +85,20 @@ const MainInput: React.FC = () => {
                     <td key={userInfo.password}>{userInfo.password}</td>
                     <td key={userInfo.birthDate}>{userInfo.birthDate}</td>
                     <td>
-                        <Button variant="warning" size="sm">
-                            Edit
-                        </Button>
+                        <Popup
+                            trigger={
+                                <Button
+                                    variant="warning"
+                                    size="sm"
+                                    onClick={() => {}}
+                                >
+                                    Edit
+                                </Button>
+                            }
+                        >
+                            <EditUser user={userInfo} />
+                        </Popup>
+
                         <Button
                             value={userInfo.id}
                             variant="danger"
